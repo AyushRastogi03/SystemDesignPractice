@@ -1,0 +1,20 @@
+package DesignPatterns.Structural.ProxyDesignPattern;
+
+public class ProxyImage implements Image{
+
+    private RealImage realImage;
+    private String fileName;
+
+    public ProxyImage(String fileName){
+        this.fileName = fileName;
+    }
+
+    @Override
+    public void display() {
+        if(realImage == null){
+            realImage = new RealImage(fileName);
+            System.out.println("Inside new realImage creation");
+        }
+        realImage.display();
+    }
+}
