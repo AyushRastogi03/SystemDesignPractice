@@ -1,0 +1,122 @@
+Write a singleton class
+How can we access Private constructor of singleton class ?? Reflection API
+Difference between Abstract and Interface
+How have memory management changed after Java 8 and Java 11
+Types of Garbage collector
+Parallel
+G1
+Serial
+Concurrent Mark Sweep
+Default garbage collector of java 11 ?? G1 GC
+What are features of Java 8 have you used?
+Difference between Synchronized HashMap and Concurrent HashMap ?
+How does Concurrent HashMap work, internal working ?
+Questions on Java 8 Streams API ?
+Filter, Distinct, max, min , sum e.t.c
+Completable Future how to use it ?? Give examples
+Dependency Injection
+Which one is least advisable ??
+How does @Autowired access private singleton classes ?
+How to resolve circular dependency in Spring ?
+How to read yaml/properties file in Spring boot
+@Value
+@ConfigurationProperties
+Unit Testing
+Difference between Spy and Mock
+How to add Stub for void methods.
+SOLID Principles, Liskov Substitution Principle
+Which other design patterns you know
+Adapter, Builder
+Microservices Design Pattern
+SAGA
+Database per service
+--------------------
+ADOBE
+
+Round 1 (PS)
+
+Introduction and asked questions from projects in company
+Ques1 - Tell whether atleast 2 non-overlapping increasing subarrays of length k exists or not in array.
+Ques2- Find Length of maximum length subarray. Alteast 2 Subarray should be non-overlapping and increasing.
+
+Round 2 (PS JAVA)
+
+Asked questions from concurrency, mutithreading, race conditions, reader writer problem
+Ques 1 Implement concurrent Hashmap- get, put, delete operations
+Ques 2 Given a tree, Node has left, right and parent pointer, Implement lock and unlock methods for Node.
+Can lock a node if its ancestor nodes and descendant nodes are unlocked.
+-------------------
+Given an integer array, print the count of subarrays which had atmost k distinct elements.
+Given a number, find the minimum no of operations done to reduce the number to zero.
+An operation is defined as subtracting one of the digits from the number.
+
+------------------
+WALMART
+
+Merge Intervals
+Index of smallest element in a sorted array
+Given a stream of numbers, implement takeInput() and getProduct() of last 3 numbers
+LRU Cache implementation. Discussion around Meghacache's eviction policy.
+Design arrayList (get,remove,add). ArrayList vs LinkedList.
+next greater element to right
+findCountOfPairsWithSumLessThanK
+Inorder traversal of a tree without recursion
+Difference between readiness probe, liveness probe, startup probe.
+Helm Charts related questions
+Discussion on kafka consumer. How to tune it to avoid frequent rebalancing?
+Given binary tree and 2 nodes, calculate sum of all the nodes in that path.
+SQL: Given employee salaries, find 2nd max
+Write singleton class.
+Longest substring with unique characters.
+System design:
+
+
+Food delivery app.
+Facebook
+CAB Booking system (MoveInSync)
+Unique ID Generator
+Notification System
+Video Streaming Platform (Zee5 etc)
+
+2.
+
+Coding round -
+It started with introduction and then project discussion.
+He asked below easy leetcode coding questions:
+
+
+https://leetcode.com/problems/maximum-average-subarray-i/description/
+https://leetcode.com/problems/odd-even-linked-list/description/
+https://leetcode.com/problems/binary-tree-right-side-view/description/
+I was able to give optimized solution for all starting with brute force solution.
+This round went well.
+
+
+LLD and Java round -
+It started with introduction and project discussion.
+Then he asked with one coding question -
+https://leetcode.com/problems/3sum/description/
+I was able to write optimized solution starting with brute force.
+Then he asked below questions:
+
+
+Advantage and disadvantage of kafka and also kafka packet size limit value
+Jdbc vs Hibernate. I could not speak much because i mostly used Jpa or hibernate instead of JDBC in my project.
+Checked vs unchecked exception
+How can we send large data to client apart from SFTP?
+Few bits got currupt while sending file it to client , how can we identify them? I answered using file checksum.
+Improvement of Java 8 to 11 to 17
+Internal working of HashMap. Got to know in recent version hashmap is using tree which i was not aware although we treeMap, i have to investigate that.
+Jvm memory model
+Garbage collection and ways to make an object eligible for it
+Garbage collection types and their usecase
+Major and minor in G1 garbage collector. I was knowing G1 GC and its usecase but was not knowing this major and minor in G1 GC. Actually who knows this until and unless he need these minor details.
+Any situation when you faced deadlock in project? I could not remember any such scenario so could not answer.
+
+---------------------------------
+Problem: Find the minimal substring that contains all unique characters of a given string, each occurring exactly once.
+--------------------------------
+
+
+
+
