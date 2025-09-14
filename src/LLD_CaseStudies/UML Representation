@@ -1,0 +1,70 @@
+🔹 UML Relationships & Their Arrow Notations
+
+1. Association (→ “uses/has a relationship”)
+
+Line: Solid line
+
+Arrow: Simple line, optionally with an open arrow to show direction
+
+Example: Customer ───→ Order (Customer places an Order)
+
+
+2. Aggregation (→ “has-a, but weak ownership”)
+
+Line: Solid line
+
+Arrow: Diamond hollow (white) at the whole side
+
+Example: Team ◇── Player (Team has Players, but players can exist without a team)
+
+
+3. Composition (→ “has-a, strong ownership / lifecycle bound”)
+
+Line: Solid line
+
+Arrow: Diamond filled (black) at the whole side
+
+Example: House ◆── Room (Room cannot exist without a House)
+
+
+4. Generalization / Inheritance (→ “is-a”)
+
+Line: Solid line
+
+Arrow: Hollow triangle pointing to parent
+
+Example: Dog ─▷ Animal (Dog is-a Animal)
+
+
+5. Realization / Interface Implementation
+
+Line: Dashed line
+
+Arrow: Hollow triangle pointing to the interface
+
+Example: ArrayList - -▷ List (ArrayList implements List)
+
+
+6. Dependency (→ “depends-on, uses temporarily”)
+
+Line: Dashed line
+
+Arrow: Open arrow
+
+Example: Order - -→ PaymentService (Order depends on PaymentService temporarily)
+
+
+
+🎯 Quick Visual Legend
+
+Association → Solid line (→)
+
+Aggregation → Solid line with hollow diamond ◇
+
+Composition → Solid line with filled diamond ◆
+
+Inheritance → Solid line with hollow triangle ▷
+
+Realization (Interface) → Dashed line with hollow triangle ▷
+
+Dependency → Dashed line with open arrow →

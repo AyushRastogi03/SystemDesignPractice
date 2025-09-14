@@ -1,0 +1,157 @@
+Functional Requirements:
+1. Create Parking with multiple floors
+2. Differnt Spot Type(Type of vehicle - CAR , Bike)
+3. park a vehicle and reserve suitable spot
+4. unpark a vehicle and free the spot
+5. Fetch available spots and type of spot
+6. prevent double booking - concurrency check
+7. support muliple entry and exit points .
+
+
+Non Functional Requirements:
+1. Thread-safe (many concurrent users).
+2. Low latency for finding an available spot.
+3. Extensible (add new vehicle/spot types, pricing rules).
+4. Simple persistence (we’ll simulate in-memory; mention DB/Redis for production).
+5. Testable.
+
+Main Entities:
+1. Vehicle - id , type , licensePlate
+2. ParkingSpot - id , type , status , lock (for concurrency)
+3. Floor - contains parking spot
+4. ParkingLot - root , holds floor , gates , mananger
+5. Gate - entry/exit point
+6. ParkingTicket - id , vehicle , spot , entryTime , exitTime , amount , status
+7. ParkingManager - core logic for parking/unparking, spot allocation, availability check
+8. PricingStrategy - interface for different pricing rules
+9. SpotAllotmentStrategy - interface for different spot allocation strategies
+
+
+Patterns Can be used:
+1.Singleton — ParkingLot or ParkingManager (if we want single instance).
+2.Strategy — PricingStrategy, SpotAllocationStrategy.
+3.Factory — create ParkingSpot or Vehicle instances if needed.
+4.Observer (optional) — for notifications after booking/exit.
+5.Command/Chain — for multi-step booking/authorization (optional).
+6.Locking/Concurrency constructs — ReentrantLock, ConcurrentHashMap.
+
+Use Cases / Flows (Sequence)
+
+Park vehicle (happy path)
+1. User arrives at EntryGate -> requests to park.
+2. ParkingManager calls findAvailableSpot(vehicleType).
+3. Allocate spot: mark RESERVED and lock the spot.
+4. Issue ParkingTicket with inTime and status=PENDING.
+5. User pays at kiosk / external payment -> on success ticket.status = ACTIVE and spot.status = OCCUPIED.
+6. If payment fails or times out -> release spot (AVAILABLE).
+
+Unpark vehicle
+1.User presents ticket at ExitGate.
+2.ParkingManager finds ticket, calculates fee via PricingStrategy.
+3.Process payment -> on success, set ticket.status = CLOSED, set outTime, free spot.
+
+
+CLASS DIAGRAM:
+
++----------------+       1     *     +-------------+
+|  ParkingLot    |-------------------|    Floor    |
+| - id           |                   | - id        |
+| - name         |                   | - spots     |
+| - floors       |                   +-------------+
++----------------+                          |
+     | 1                                      | *
+     |                                        v
+     |                                     +--------------+
+     |                                     | ParkingSpot  |
+     |                                     | - id         |
+     |                                     | - type       |
+     |                                     | - status     |
+     |                                     | - lock       |
+     |                                     +--------------+
+     |
+     v
++------------------+            +------------------+
+| ParkingManager   |<>----------| PricingStrategy  |
+| - lot            |            +------------------+
+| - allocateSpot() |            | +calculate(ticket):double
+| - freeSpot()     |            +------------------+
++------------------+
+      |
+      v
++------------------+
+| ParkingTicket    |
+| - id             |
+| - vehicle        |
+| - spotId         |
+| - inTime/outTime |
+| - status         |
++------------------+
+
++--------------+      +------------+
+| Vehicle      |      | Gate       |
+| - type       |      | - id       |
+| - plate      |      | - type     |
++--------------+      +------------+
+-----------------------------
++-----------------+
+|  ParkingLot     |
++-----------------+
+| name            |
+| address         |
+| List<Floor>     |
+| List<Gate>      |
++-----------------+
+| addFloor()      |
+| addGate()       |
+| getAvailableSlot() |
++-----------------+
+
++-----------------+
+| Floor           |
++-----------------+
+| floorNumber     |
+| List<ParkingSlot>|
++-----------------+
+| addSlot()       |
+| getAvailableSlot() |
++-----------------+
+
++-----------------+
+| ParkingSlot     |
++-----------------+
+| id              |
+| type (CAR/BIKE) |
+| isFree          |
++-----------------+
+| assignVehicle() |
+| removeVehicle() |
++-----------------+
+
++-----------------+
+| Gate (abstract) |
++-----------------+
+| id              |
+| operatorName    |
++-----------------+
+| processVehicle()|
++-----------------+
+
+    /|\
+     |
+     +----------------+
+     |                |
++-------------+  +-------------+
+| EntryGate   |  | ExitGate    |
++-------------+  +-------------+
+
++-----------------+
+| Ticket          |
++-----------------+
+| ticketId        |
+| vehicle         |
+| slot            |
+| entryTime       |
+| exitTime        |
++-----------------+
+
+
