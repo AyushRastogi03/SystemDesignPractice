@@ -1,0 +1,256 @@
+ParkingLot ----
+Requirement
+
+1. Multiple Floors
+2. Each Floor has multiple Spot
+3. Different Vehicle - CAR , BIKE , EV
+4. DifferentTypeof SPOT - 4 wheeler , 2 wheeler
+5. OCCUPIED or UNOCCUPIED - SpotOCCUPANCY
+6. Pricing
+7. When Vehicle enters - find a spot , park vehicle , generate parking ticket and block the spot
+8. When Vehicle exists - check ticket , calculate pricing , initiate payment , release SPOT.
+9. find the nearest SPOT.
+10. Multiple other features can be added like - EV Charging , Lost Ticket , monthly pass etc.
+
+
+
+Step 2 - Identify Entities
+
+1. Parking SPOT
+2. Parking LOT
+3. Vehicle
+4. Ticket
+5. Floor
+6. Payment
+7. Parking Manager
+8. Gate
+
+
+Classes:
+1. Parking Lot
+2. Ticket
+3. Floor
+
+Interfaces:
+1. Pricing strategy
+2. ParkingSpotAllocation strategy
+3. Payment strategy
+
+Enums:
+1. Vehicle - BIKE , EV , CAR, TRUCK
+2. SpotType- BIKE, EV , COMPACT , BIG
+3. SpotState - OCCUPIED , AVAILABLE , OUT_OF_SERVICE
+4. TicketStatus - ACTIVE , LOST , EXPIRED
+5. PaymentStatus - PENDING , PAID, FAILED
+
+
+Functional Requirement
+1. Parking lot can have multiple floors.
+2. Each floor can have multiple parking spots.
+3. Supported vehicle types:
+   - BIKE
+   - CAR
+   - EV
+   - TRUCK
+
+4. Supported parking spot types:
+   - BIKE
+   - COMPACT
+   - LARGE
+   - EV
+
+5. Parking spot can have states:
+   - AVAILABLE
+   - OCCUPIED
+   - OUT_OF_SERVICE
+
+6. When a vehicle enters:
+   - Find an appropriate available parking spot.
+   - Prefer the nearest available spot.
+   - Assign the vehicle to the spot.
+   - Mark the spot occupied.
+   - Generate a parking ticket.
+
+7. When a vehicle exits:
+   - Validate the parking ticket.
+   - Calculate parking fee.
+   - Process payment.
+   - Release the parking spot.
+   - Close the parking ticket.
+
+8. Pricing may depend on:
+   - Vehicle type
+   - Parking duration
+
+9. System should be extensible for:
+   - Different parking allocation strategies
+   - Different pricing strategies
+   - Different payment methods
+
+Future Requirements:
+- EV charging
+- Lost ticket handling
+- Monthly passes
+- Reservations
+
+
+Non Functional Requirement
+1. Extensibility
+   - easy to add new vehicle , new spot , new pricing strategy etc
+2. Maintainability
+   - follow solid principles
+3. Concurrency
+   - Two vehicles should not be assigned same spot
+4. Consistency
+   - payment status , spot status , ticket status should be consistent
+5. Performance
+   - finding spot should be efficient with many floors and spot
+
+
+
+UML CLASS DIAGRAM
+=================
+
+```mermaid
+classDiagram
+    class ParkingLot {
+        -String parkingLotId
+        -List~Floor~ parkingFloors
+        -List~Gate~ entryGates
+        -List~Gate~ exitGates
+    }
+
+    class Floor {
+        -String floorId
+        -List~ParkingSpot~ parkingSpotList
+    }
+
+    class ParkingSpot {
+        -String spotId
+        -SpotState spotState
+        -SpotType spotType
+    }
+
+    class Gate {
+        -String gateId
+        -GateType gateType
+    }
+
+    class Vehicle {
+        -String vehicleNumber
+        -VehicleType vehicleType
+    }
+
+    class Ticket {
+        -String ticketNumber
+        -TicketStatus ticketStatus
+        -Vehicle vehicle
+        -ParkingSpot parkingSpot
+        -Payment payment
+        -LocalDateTime entryTime
+        -LocalDateTime exitTime
+        -Gate entryGate
+        -Gate exitGate
+    }
+
+    class Payment {
+        -String paymentId
+        -Double paymentAmount
+        -PaymentStatus paymentStatus
+    }
+
+    class ParkingManagerService {
+        +Ticket parkVehicle(Vehicle vehicle, Gate entryGate)
+        +Double calculateAmount(String ticketNumber)
+        +PaymentStatus makePaymentAndReleaseSpot(String ticketNumber, PaymentMethod method, double amount)
+    }
+
+    class PricingStrategy {
+        <<interface>>
+        +Double calculateAmount(Ticket ticket)
+    }
+
+    class ParkingSpotAllocationStrategy {
+        <<interface>>
+        +ParkingSpot findSpot(Vehicle vehicle, ParkingLot parkingLot)
+    }
+
+    class PaymentMethodStrategy {
+        <<interface>>
+        +String pay(double amount)
+    }
+
+    class VehicleType {
+        <<enumeration>>
+        BIKE
+        CAR
+        EV
+        TRUCK
+    }
+
+    class SpotType {
+        <<enumeration>>
+        BIKE
+        COMPACT
+        LARGE
+        EV
+    }
+
+    class SpotState {
+        <<enumeration>>
+        AVAILABLE
+        OCCUPIED
+        OUT_OF_SERVICE
+    }
+
+    class TicketStatus {
+        <<enumeration>>
+        ACTIVE
+        CLOSED
+        LOST
+        EXPIRED
+    }
+
+    class PaymentStatus {
+        <<enumeration>>
+        PENDING
+        PAID
+        FAILED
+    }
+
+    class GateType {
+        <<enumeration>>
+        ENTRY_GATE
+        EXIT_GATE
+    }
+
+    class PaymentMethod {
+        <<enumeration>>
+        UPI
+        CASH
+        CARD
+    }
+
+    ParkingLot "1" *-- "1..*" Floor : contains
+    Floor "1" *-- "1..*" ParkingSpot : contains
+    ParkingLot "1" o-- "0..*" Gate : has
+    Ticket "1" --> "1" Vehicle : for
+    Ticket "1" --> "1" ParkingSpot : uses
+    Ticket "1" --> "0..1" Payment : records
+    Ticket "1" --> "1" Gate : entry gate
+    Ticket "1" --> "0..1" Gate : exit gate
+
+    ParkingManagerService --> ParkingLot : manages
+    ParkingManagerService --> Ticket : creates/validates
+    ParkingManagerService --> PricingStrategy : uses
+    ParkingManagerService --> ParkingSpotAllocationStrategy : uses
+    ParkingManagerService --> PaymentMethodStrategy : uses
+
+    Vehicle --> VehicleType
+    ParkingSpot --> SpotType
+    ParkingSpot --> SpotState
+    Gate --> GateType
+    Ticket --> TicketStatus
+    Payment --> PaymentStatus
+```
+
